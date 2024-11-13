@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useState } from "react"
 import Navbar from "./components/Navbar"
 import Hero from "./components/Hero"
 import How from "./components/How"
@@ -7,18 +7,18 @@ import Global from "./components/Global"
 import Footer from "./components/Footer"
 
 export default function LandingPage() {
-  const globalRef = useRef(null)
+  const [showForm, setShowForm] = useState(false)
 
-  const scrollToGlobal = () => {
-    globalRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  const handleGetStartedClick = () => {
+    setShowForm((prev) => !prev) // Toggle showForm to trigger the form visibility and scroll
   }
 
   return (
     <div className="bg-white">
-      <Navbar onGetStartedClick={scrollToGlobal} />
-      <Hero onGetStartedClick={scrollToGlobal} />
+      <Navbar onGetStartedClick={handleGetStartedClick} />
+      <Hero onGetStartedClick={handleGetStartedClick} />
       <How />
-      <Global ref={globalRef} />
+      <Global showForm={showForm} />
       <Unify />
       <Footer />
     </div>
