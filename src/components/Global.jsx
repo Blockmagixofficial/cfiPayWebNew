@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
 
 const Global = ({ showForm }) => {
@@ -23,13 +24,24 @@ const Global = ({ showForm }) => {
     }
   }, [showForm])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    console.log()
     if (email) {
-      toast.success("Email added to waitlist")
-      setIsSubmitted(true)
-      setIsFormVisible(false) // Hide form after submission
-      setEmail('') // Clear the input field
+      try {
+        const response = await axios.post('https://backend.gamocrat.com/api/add-to-whitelist', { emailId:email })
+        if (response.status === 200) {
+          toast.success('Email added to waitlist')
+          setIsSubmitted(true)
+          setIsFormVisible(false) // Hide form after submission
+          setEmail('') // Clear the input field
+        } else {
+          toast.error('Something went wrong. Please try again later.')
+        }
+      } catch (error) {
+        toast.error('Failed to add email to the waitlist. Please try again later.')
+        console.error('Error submitting email:', error)
+      }
     }
   }
 
